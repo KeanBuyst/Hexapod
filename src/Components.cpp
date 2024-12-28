@@ -7,8 +7,8 @@
 #include <iostream>
 #include <climits>
 
-const float lenFemor = 80;
-const float lenTibia = 130;
+const float lenFemor = 78;
+const float lenTibia = 100;
 
 Components::Servo::Servo(uint pin,float shift,uint max) : pin(pin),shift(shift),max(max)
 {};
@@ -24,7 +24,7 @@ void Components::Servo::setAngle(float angle) const
     angle += shift;
     if (angle > max || angle < 0)
     {
-        std::cerr << "PI-GPIO: provided angle out of bounds -> Servo::setAngle(" << angle << ")" << std::endl;
+        std::cerr << "PI-GPIO(" << pin << "): provided angle out of bounds -> Servo::setAngle(" << angle << ")" << std::endl;
         return;
     }
     float dc = (angle/max) * 1900 + 500;
@@ -61,7 +61,7 @@ void Components::K3::toPoint(float x, float y, float z)
 void Components::K3::setGoal(Kinematics::Vector position)
 {
     Kinematics::Vector pos = (position + Kinematics::origin).round();
-    step = (pos - current) / 40.f;
+    step = (pos - current) / 50.f;
     end = pos;
 }
 
@@ -86,7 +86,7 @@ void Components::K3::debug()
     base->setAngle(90);
     femor->setAngle(90);
     tibia->setAngle(90);
-    gpioSleep(PI_TIME_RELATIVE, 2, 0);
+    gpioSleep(PI_TIME_RELATIVE,1,0);
 }
 
 void Components::Controller::event(AXIES type,std::function<void(AxisInput&)> lambda)

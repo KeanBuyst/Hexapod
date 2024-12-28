@@ -139,16 +139,20 @@ namespace Components {
     class Hexapod 
     {
         public:
-        static constexpr float height = 40;
+        static constexpr float height = 80;
         static constexpr int radius = 50; // in mm
         static constexpr float max_speed = 1.1f;
 
-        Hexapod(K3* R1,K3* R2,K3* R3);
+        Hexapod(K3* R1,K3* R2,K3* R3,K3* L1,K3* L2,K3* L3);
         void move();
         void rotate();
 
-        void setRotation(float radians) { rotation = radians; }
-        void setSpeed(float speed) { this->speed = speed; }
+        void setRotation(float radians);
+        void setSpeed(float speed);
+
+        void interupts();
+        void stand();
+        void sit();
 
         private:
         K3
@@ -159,6 +163,15 @@ namespace Components {
         float 
         rotation, // in radians
         speed;
+
+        bool
+        standing = false,
+        sitting = false;
+
+        void compute();
+
+        inline void _stand();
+        inline void _sit();
 
         constexpr int time();
     };
